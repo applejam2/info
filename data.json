@@ -1,0 +1,32 @@
+{
+    "news": [
+        {
+            "id": "n-0001",
+            "date": "2026.10.28",
+            "text": "応募■関西コミティア78■",
+            "link": ""
+        }
+    ],
+    "books": [
+        {
+            "id": "a-0001",
+            "title": "文化",
+            "description": "原作向け創作まとめ本。",
+            "date": "2025.12.14",
+            "links": [
+                { "img": "img/books/001.webp" },
+                { "pixiv": "https://www.pixiv.net/artworks/164155905" }
+            ]
+        }
+    ],
+    "shop": [
+        {
+            "title": "準備中",
+            "date": "2027.01.20",
+            "links": [
+                { "img": "none.png" },
+                { "x": "https://x.com/rinngozyamu_2" }
+            ]
+        }
+    ]
+}
