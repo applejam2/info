@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>りんごじゃむ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         :root{
-            --accent-color:  #86f1cd;;
+            --accent-color: #86f1cd;
+            --tag-color: #cbbdf5 ;
         }
         body { 
             width: 100%;
@@ -20,11 +22,15 @@
         section {
             text-align: center;
             margin-bottom: 1vw;
+            width: 100%;
+            max-width: 600px;
         }
         p {
             margin: 0;
         }
         #artist_link {
+            width: 80%;
+            margin: 0 auto;
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -47,25 +53,86 @@
         }
         ul {
             display: flex;
+            justify-content: center;
             gap: 20px;
             list-style: none;
             padding: 0;
             margin: 0;
+            margin-bottom: 30px;
             text-align: center;
         }
         a {
             margin: 0;
             text-decoration: none;
+            color: inherit;
         }
         a p:hover {
             background-color: var(--accent-color);
             color: #000000;
         }
-        a:visited{
-             color: #0000EE;
+        a:visited {
+            color: #0000EE;
         }
         img {
             width: 200px;
+        }
+
+        .news-simple {
+            width: 100%;
+            background-color: var(--accent-color);
+        }
+        .date-item {
+            border-top: 1px solid #ccc;
+            padding-top: 15px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            text-align: left;
+        }
+        .date-item img{
+            width: 50px;
+        }
+        .date-item-content {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .date-news-item {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .date-news-label {
+            background-color: var(--tag-color);
+            color: #000;
+            padding: 2px 10px;
+            font-weight: bold;
+            border-radius: 20%;
+        }
+        .date-news-text {
+            padding: 5px 10px;
+            flex-grow: 1;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                width: 100%;
+                margin-left: 0;
+                min-height: auto;
+            }
+            img {
+                width: 150px;
+            }
+            #main {
+                margin-top: 20px;
+                display: flex;
+                flex-direction: column-reverse;
+            }
+            #artist_link div {
+                margin-bottom: 0px;
+            }
         }
     </style>
 </head>
@@ -74,33 +141,220 @@
         <img src="https://pbs.twimg.com/profile_images/2114874612731535360/6gZoHGT5_400x400.jpg" alt="りんごじゃむ">
         <p><b>りんごじゃむ</b><br>創作サークル告知サイト！</p>
     </section>
+
     <section id="news">
         <p><b>ー お知らせ ✦</b></p>
-        <p style="width: 100%; background-color: var(--accent-color);">参加■関西コミティア78■</p>
-    </section>
-    <section id="artist_link">
-        <div id="akron">
-            <a href="https://x.com/AK_ewokakuyo"><img src="https://gyazo.com/673d47374599a23f629b663045b27ae9.png" alt="akron" id="aki"></a>
-            <a href="https://x.com/AK_ewokakuyo"><p>[　akron　]</p></a>
-            <a href="https://lit.link/akewokaku"><p>[　リンク集　]</p></a>
-        </div>
-        <div id="HIC_SHI">
-            <a href="https://hic-shi.github.io/info/about.html"><img src="https://i.gyazo.com/02f9dfba501550076e38e0aa291473cd.png" alt="HIC_SHI" id="hii"></a>
-            <a href="https://hic-shi.github.io/info/about.html"><p>[　info　]</p></a>
-            <a href="https://x.com/hic_shi_o"><p>[　HIC_SHI　]</p></a>
+        <div id="news-container">
         </div>
     </section>
-    <ul>
-        <li>
-            <p>新刊</p>
-            <img src="none.png" alt="作品A">
-            <p>タイトルA</p>
-        </li>
-        <li>
-            <p>前作</p>
-            <img src="none.png" alt="作品B">
-            <p>タイトルB</p>
-        </li>
-    </ul>
+
+    <section id="main">
+        <div id="artist_link">
+            <div id="akron">
+                <a href="https://x.com/AK_ewokakuyo"><img src="https://gyazo.com/673d47374599a23f629b663045b27ae9.png" alt="akron" id="aki"></a>
+                <a href="https://x.com/AK_ewokakuyo"><p>[ akron ]</p></a>
+                <a href="https://lit.link/akewokaku"><p>[ リンク集 ]</p></a>
+            </div>
+            <div id="HIC_SHI">
+                <a href="https://hic-shi.github.io/info/about.html"><img src="https://i.gyazo.com/02f9dfba501550076e38e0aa291473cd.png" alt="HIC_SHI" id="hii"></a>
+                <a href="https://hic-shi.github.io/info/about.html"><p>[ info ]</p></a>
+                <a href="https://x.com/hic_shi_o"><p>[ HIC_SHI ]</p></a>
+            </div>
+        </div>
+        
+        <ul id="content-container">
+        </ul>
+    </section>
+
+    <section id="date">
+        <p><b>ー  DATA ✦</b></p>
+        <div id="date-container">
+        </div>
+    </section>
+
+    <script>
+        fetch('data.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('JSONファイルの読み込みに失敗しました');
+                }
+                return response.json();
+            })
+            .then(siteData => {
+                const newsContainer = document.getElementById('news-container');
+                if (siteData.news) {
+                    siteData.news.forEach(item => {
+                        const p = document.createElement('p');
+                        p.className = 'news-simple';
+                        p.textContent = item.text;
+                        newsContainer.appendChild(p);
+                    });
+                }
+
+                const contentContainer = document.getElementById('content-container');
+
+                function createMainCard(item, labelText) {
+                    const li = document.createElement('li');
+
+                    const labelP = document.createElement('p');
+                    labelP.textContent = labelText;
+                    li.appendChild(labelP);
+
+                    let imgSrc = "none.png";
+                    let linkUrl = "#";
+                    
+                    if (item.links) {
+                        item.links.forEach(l => {
+                            if (l.img) imgSrc = l.img;
+                            if (l.pixiv) linkUrl = l.pixiv;
+                            if (l.x) linkUrl = l.x;
+                        });
+                    }
+
+                    const aImg = document.createElement('a');
+                    aImg.href = linkUrl;
+                    aImg.target = "_blank";
+                    
+                    const img = document.createElement('img');
+                    img.src = imgSrc;
+                    img.alt = item.title;
+                    aImg.appendChild(img);
+                    li.appendChild(aImg);
+
+                    const aTitle = document.createElement('a');
+                    aTitle.href = linkUrl;
+                    aTitle.target = "_blank";
+                    
+                    const titleP = document.createElement('p');
+                    titleP.textContent = item.title;
+                    aTitle.appendChild(titleP);
+                    li.appendChild(aTitle);
+
+                    contentContainer.appendChild(li);
+                }
+
+                if (siteData.books && siteData.books.length > 0) {
+                    let sortedBooks = [...siteData.books].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+                    createMainCard(sortedBooks[0], "新作");
+                }
+
+                if (siteData.shop && siteData.shop.length > 0) {
+                    let sortedShop = [...siteData.shop].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+                    createMainCard(sortedShop[0], "お品書き");
+                }
+
+                const dateContainer = document.getElementById('date-container');
+                let dateItems = [];
+
+                if (siteData.news) {
+                    siteData.news.forEach(item => {
+                        dateItems.push({
+                            date: item.date || "2024.06.10",
+                            type: 'news',
+                            text: item.text
+                        });
+                    });
+                }
+
+                if (siteData.shop) {
+                    siteData.shop.forEach(item => {
+                        dateItems.push({
+                            date: item.date || "2024.06.10",
+                            type: 'shop',
+                            item: item
+                        });
+                    });
+                }
+
+                if (siteData.books) {
+                    siteData.books.forEach(item => {
+                        dateItems.push({
+                            date: item.date || "2024.06.10",
+                            type: 'book',
+                            item: item
+                        });
+                    });
+                }
+
+                dateItems.sort((a, b) => b.date.localeCompare(a.date));
+
+                dateItems.forEach(entry => {
+                    const div = document.createElement('div');
+                    div.className = 'date-item';
+
+                    if (entry.type === 'news') {
+                        div.className += ' date-news-wrapper';
+                        
+                        const newsBox = document.createElement('div');
+                        newsBox.className = 'date-news-item';
+
+                        const labelP = document.createElement('p');
+                        labelP.className = 'date-news-label';
+                        labelP.textContent = 'news';
+
+                        const textP = document.createElement('p');
+                        textP.className = 'date-news-text';
+                        textP.textContent = entry.text;
+
+                        newsBox.appendChild(labelP);
+                        newsBox.appendChild(textP);
+                        div.appendChild(newsBox);
+                    } else {
+                        const item = entry.item;
+                        let imgSrc = "none.png";
+                        let linkUrl = "#";
+                        
+                        if (item.links) {
+                            item.links.forEach(l => {
+                                if (l.img) imgSrc = l.img;
+                                if (l.pixiv) linkUrl = l.pixiv;
+                                if (l.x) linkUrl = l.x;
+                            });
+                        }
+
+                        const aImg = document.createElement('a');
+                        aImg.href = linkUrl;
+                        aImg.target = "_blank";
+                        
+                        const img = document.createElement('img');
+                        img.src = imgSrc;
+                        img.alt = item.title;
+                        aImg.appendChild(img);
+                        div.appendChild(aImg);
+
+                        const contentDiv = document.createElement('div');
+                        contentDiv.className = 'date-item-content';
+
+                        if (entry.type === 'shop') {
+                            const labelP = document.createElement('p');
+                            labelP.textContent = "お品書き";
+                            contentDiv.appendChild(labelP);
+                        }
+
+                        const aTitle = document.createElement('a');
+                        aTitle.href = linkUrl;
+                        aTitle.target = "_blank";
+                        
+                        const titleP = document.createElement('p');
+                        titleP.textContent = item.title;
+                        aTitle.appendChild(titleP);
+                        contentDiv.appendChild(titleP);
+
+                        if (item.description) {
+                            const descP = document.createElement('p');
+                            descP.textContent = item.description;
+                            contentDiv.appendChild(descP);
+                        }
+
+                        div.appendChild(contentDiv);
+                    }
+
+                    dateContainer.appendChild(div);
+                });
+            })
+            .catch(error => {
+                console.error('エラー:', error);
+            });
+    </script>
 </body>
 </html>
